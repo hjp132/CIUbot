@@ -1,0 +1,26 @@
+.dark-mode{
+    background-color: #303030;
+    color: white;    
+}
+
+body{
+    background-color: #303030;
+    color: white;    
+}
+
+
+.center{
+    text-align: center;
+    margin: 0 auto;
+}
+
+h1{
+    &.title{
+        font-size: 82px
+    }
+    
+}
+
+.spacing{
+    margin-right: 20px
+}

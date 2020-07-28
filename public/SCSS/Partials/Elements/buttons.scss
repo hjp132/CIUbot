@@ -1,0 +1,44 @@
+.btn{
+    
+    border-radius: 10px;
+    border: 1px solid white;
+    color: white;
+
+    &.single{
+        width: 80%;
+        margin: 0 auto;
+        margin-top: 50px;
+    }
+    &.back{
+        max-width: 100px;
+        margin: 0  0 0 auto;
+        display: inline-block;
+        
+    }
+    &.hidden{
+        display: none;
+    }
+    &.submit{
+        display: block;
+        margin: 0 auto;
+        width: 100px;
+    }
+    
+
+}
+
+.btn:hover{
+    color:white;
+}
+
+
+
+.next{
+    max-width: 100px;
+    margin: 0 auto 0 0;
+    display: none;
+    &.visible{
+        display: inline-block;
+    }
+}
+   
