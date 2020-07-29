@@ -1,10 +1,28 @@
+const Discord = require('discord.js');
+const client = new Discord.Client();
+
+client.on('ready', () => {
+  console.log(`Logged in as ${client.user.tag}!`);
+});
+
+client.on('message', msg => {
+  if (msg.content === 'ping') {
+    msg.reply('Pong!');
+  }
+});
+
+client.login('token');
+
+
+
+
 const app = require('./app');
 const path = require('path');
 const hbs = require('hbs');
 const express = require('express');
 
 
-const chest1 = require('./routes/chest1');
+
 
 
 const port = process.env.PORT || 3000;
@@ -53,12 +71,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 
 app.get('/', (req, res) => {
-    res.render('intro', {
-        Day: currentDay,
-        Group: grouping,
-        set
-    
-    })
+    res.render('intro')
 });
 
 

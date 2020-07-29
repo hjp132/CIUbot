@@ -1,105 +1,21 @@
 @-ms-viewport {
   width: device-width;
 }
-.dark-mode {
-  background-color: #303030;
-  color: white;
-}
-
-body {
-  background-color: #303030;
-  color: white;
-}
-
-.center {
+.textblock {
+  display: block;
   text-align: center;
-  margin: 0 auto;
+  height: 100%;
+  margin-top: 19%;
 }
 
-h1.title {
-  font-size: 82px;
-}
-
-.spacing {
-  margin-right: 20px;
-}
-
-.btn {
-  border-radius: 10px;
-  border: 1px solid white;
-  color: white;
-}
-.btn.single {
-  width: 80%;
-  margin: 0 auto;
-  margin-top: 50px;
-}
-.btn.back {
-  max-width: 100px;
-  margin: 0 0 0 auto;
+.text {
   display: inline-block;
-}
-.btn.hidden {
-  display: none;
-}
-.btn.submit {
-  display: block;
-  margin: 0 auto;
-  width: 100px;
+  font-size: 40px;
 }
 
-.btn:hover {
-  color: white;
-}
-
-.next {
-  max-width: 100px;
-  margin: 0 auto 0 0;
-  display: none;
-}
-.next.visible {
-  display: inline-block;
-}
-
-.queue {
-  margin: 15px 0;
-  display: block;
-}
-
-.setGrouping {
-  display: inline-block;
-}
-
-.set {
-  background: #303030;
-  border: 2px solid #4892a2;
-  border-radius: 12px;
-  padding: 20px;
-  font-size: 20px;
-  font-weight: 700;
-  margin: 10px 0;
-}
-
-.setSubmit {
-  border-radius: 10px;
-  border: 1px solid white;
-  color: white;
-  background: #4892a2;
-  padding: 5px 10px;
-}
-
-.item {
-  display: inline-block;
-}
-
-header {
-  background-color: #4892a2;
-  display: inline-block;
-  padding: 20px;
-  vertical-align: middle;
-  width: 100%;
-  color: white;
-  margin-bottom: 50px;
+.inputtext {
+  max-width: 350px;
+  margin-left: 6px;
 }
 
 /*# sourceMappingURL=style.css.map */
