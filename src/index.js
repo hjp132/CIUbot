@@ -1,3 +1,9 @@
+require('dotenv').config();
+
+let token = process.env.REALTOKEN
+
+const caniuse = require('caniuse-api')
+
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
@@ -7,24 +13,34 @@ client.on('ready', () => {
 
 client.on('message', msg => {
   if (msg.content === 'ping') {
-    msg.reply('Pong!');
+    msg.reply('pong');
   }
 });
 
-client.login('token');
 
+client.on('message', msg => {
+    if (msg.content.startsWith("ciu")) {
+        let messageContent = msg.content.split(" ")
+        let messageTest = messageContent[1].toLowerCase();
+        msg.reply('Can you use ' + messageTest + '? Lets find out..')
+        let caniuseReply = caniuse.find(messageTest)
+        if (caniuseReply == ""){
+            caniuseReply = messageTest
+            msg.reply("I'm sorry I can't seem to find what you're looking for.")
+        } else {
+            msg.reply("I'm looking at " + caniuseReply + ".")
+        }
+    }
+});
 
+client.login(token);
 
+// TO DO - Implement a caniuseapi and look into if i need npm/superagent
 
 const app = require('./app');
 const path = require('path');
 const hbs = require('hbs');
 const express = require('express');
-
-
-
-
-
 const port = process.env.PORT || 3000;
 
 app.set('port', process.env.PORT);
@@ -44,35 +60,6 @@ hbs.registerPartials(partialsPath);
 app.use(express.static(publicDirectoryPath));
 app.use(express.static(path.join(__dirname, '/public')));
 
-
-// const router = express.Router();
-// app.use('/',router);
-
-// // CRUD create read update delete
-
-
-// const { routes } = require('./app');
-
-
-
-
-
-
-// router.get('/', function(req, res) {
-//     // Get the only one db instance in our app
-//     var db = req.db;
- 
-//     // Fetch from 'users' collection
-//     var userCollection = db.get("chest-1");
-//     userCollection.find({}, {}, function(e, docs) {
-//           res.render('user-list', {'userlist' : docs});
-//     });
-// });
-
-
-app.get('/', (req, res) => {
-    res.render('intro')
-});
 
 
 
