@@ -17,27 +17,69 @@ client.on('message', msg => {
   }
 });
 
+let resultsArray = [];
+// let iterateIndex;
+
 
 client.on('message', msg => {
-    if (msg.content.startsWith("ciu")) {
-        let messageContent = msg.content.split(" ")
-        let messageTest = messageContent[1].toLowerCase();
-        msg.reply('Can you use ' + messageTest + '? Lets find out..')
-        let caniuseReply = caniuse.find(messageTest)
-        if (caniuseReply == ""){
-            caniuseReply = messageTest
-            msg.reply("I'm sorry I can't seem to find what you're looking for.")
-        } else {
-            msg.reply("I'm looking at " + caniuseReply + ".")
-        }
+  if (msg.content.startsWith("ciu")) {
+      let messageContent = msg.content.split(" ")
+      let messageTest = messageContent[1].toLowerCase();
+      msg.reply('Can you use ' + messageTest + '? Lets find out..')
+      let caniuseReply = caniuse.find(messageTest)
+      
 
-        console.log(caniuseReply)
-        let getSupport = caniuse.getSupport(messageTest, true)
-        console.log(getSupport)
+      //if it finds multiple options for you to pick from it splits and turns into an array
+      // (console logs for debugging please delete when finished, idiot)
+      resultsArray = caniuseReply.toString().split(",");
+      console.log(caniuseReply)
+      console.log(resultsArray)
+      console.log(resultsArray.length)
 
-        let tostringSupport = getSupport.toString();
-        msg.reply(tostringSupport)
-    }
+      //in the event that there is multiple options it will let you pick what one you meant
+      let NumberOfOptions = resultsArray.length;
+      if (NumberOfOptions >= 2) {
+        console.log("theres multiple here bro")
+        msg.reply("Please pick between the following:")
+        let resultsIndex = 0;
+        resultsArray.forEach( () => {
+          msg.reply(resultsIndex + " - " + resultsArray[resultsIndex])
+          resultsIndex++;
+        })
+     
+        
+      } else {
+        // in the event that it finds 1 it will then say this!
+        msg.reply('I found: ' + caniuseReply + "!")
+      }
+
+
+  //     if (caniuseReply == "" || caniuseReply == null || caniuseReply == undefined){
+  //         caniuseReply = messageTest
+  //         msg.reply("I'm sorry I can't seem to find what you're looking for.")
+  //     } else {
+  //         msg.reply("I'm looking at " + caniuseReply[0] + ".")
+  //     }
+
+  //     console.log("mesage test " + messageTest)
+  //     console.log("caniusereply " + caniuseReply)
+
+  //     //in instance when there are multiple give the option to pick between the array
+    
+  //     let getSupport;
+  //     if (typeof caniuseReply === 'string'){
+  //       getSupport = caniuse.getSupport(caniuseReply, false)
+  //       console.log(getSupport)
+  //     } else {
+  //       getSupport = caniuse.getSupport(caniuseReply[0], false)
+  //       console.log(getSupport)
+  //     }
+      
+ 
+
+  //     let tostringSupport = getSupport.toString();
+  //     msg.reply(tostringSupport)
+  }
 });
 
 client.login(token);
