@@ -30,6 +30,13 @@ client.on('message', msg => {
         } else {
             msg.reply("I'm looking at " + caniuseReply + ".")
         }
+
+        console.log(caniuseReply)
+        let getSupport = caniuse.getSupport(messageTest, true)
+        console.log(getSupport)
+
+        let tostringSupport = getSupport.toString();
+        msg.reply(tostringSupport)
     }
 });
 
