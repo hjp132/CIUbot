@@ -51,7 +51,6 @@ client.on('message', msg => {
         client.on('message', msg => {
           if (msg.content.startsWith("!option")) {
             messageContent = msg.content.split(" ")
-            console.log("you chose: " + messageContent[1] + "right?")
             msg.reply("Looking for results for " + resultsArray[messageContent[1]])
           }
         })
@@ -96,28 +95,6 @@ client.login(token);
 
 // TO DO - Implement a caniuseapi and look into if i need npm/superagent
 
-const app = require('./app');
-const path = require('path');
-const hbs = require('hbs');
-const express = require('express');
-const port = process.env.PORT || 3000;
-
-app.set('port', process.env.PORT);
-
-app.listen(port, () => {
-    console.log('Server is up on port ' + port) 
-});
-
-
-const publicDirectoryPath = path.join(__dirname, '../public/');
-const viewsPath = path.join(__dirname, '../templates/views');
-const partialsPath = path.join(__dirname, '../templates/partials');
-
-app.set('view engine', 'hbs');
-app.set('views', viewsPath);
-hbs.registerPartials(partialsPath);
-app.use(express.static(publicDirectoryPath));
-app.use(express.static(path.join(__dirname, '/public')));
 
 
 
