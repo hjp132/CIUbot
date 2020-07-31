@@ -22,7 +22,7 @@ let resultsArray = [];
 
 
 client.on('message', msg => {
-  if (msg.content.startsWith("ciu")) {
+  if (msg.content.startsWith("!ciu")) {
       let messageContent = msg.content.split(" ")
       let messageTest = messageContent[1].toLowerCase();
       msg.reply('Can you use ' + messageTest + '? Lets find out..')
@@ -40,12 +40,16 @@ client.on('message', msg => {
       let NumberOfOptions = resultsArray.length;
       if (NumberOfOptions >= 2) {
         console.log("theres multiple here bro")
-        msg.reply("Please pick between the following:")
+        msg.reply("Please pick between the following: (!option x)")
         let resultsIndex = 0;
         resultsArray.forEach( () => {
           msg.reply(resultsIndex + " - " + resultsArray[resultsIndex])
           resultsIndex++;
         })
+        // if (msg.content.startsWith("!option")) {
+        //   messageContent = msg.content.split(" ")
+        //   console.log("you chose:" + messageContent[1] + "right?")
+        // }
      
         
       } else {
