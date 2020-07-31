@@ -19,11 +19,12 @@ client.on('message', msg => {
 
 let resultsArray = [];
 // let iterateIndex;
+let messageContent
 
 
 client.on('message', msg => {
   if (msg.content.startsWith("!ciu")) {
-      let messageContent = msg.content.split(" ")
+      messageContent = msg.content.split(" ")
       let messageTest = messageContent[1].toLowerCase();
       msg.reply('Can you use ' + messageTest + '? Lets find out..')
       let caniuseReply = caniuse.find(messageTest)
@@ -46,12 +47,15 @@ client.on('message', msg => {
           msg.reply(resultsIndex + " - " + resultsArray[resultsIndex])
           resultsIndex++;
         })
-        // if (msg.content.startsWith("!option")) {
-        //   messageContent = msg.content.split(" ")
-        //   console.log("you chose:" + messageContent[1] + "right?")
-        // }
-     
-        
+        // this now goes to the !option event handler at the next function VVV
+        client.on('message', msg => {
+          if (msg.content.startsWith("!option")) {
+            messageContent = msg.content.split(" ")
+            console.log("you chose: " + messageContent[1] + "right?")
+            msg.reply("Looking for results for " + resultsArray[messageContent[1]])
+          }
+        })
+
       } else {
         // in the event that it finds 1 it will then say this!
         msg.reply('I found: ' + caniuseReply + "!")
@@ -85,6 +89,8 @@ client.on('message', msg => {
   //     msg.reply(tostringSupport)
   }
 });
+
+
 
 client.login(token);
 
