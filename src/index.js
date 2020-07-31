@@ -19,11 +19,12 @@ client.on('message', msg => {
 
 let resultsArray = [];
 // let iterateIndex;
+let messageContent
 
 
 client.on('message', msg => {
-  if (msg.content.startsWith("ciu")) {
-      let messageContent = msg.content.split(" ")
+  if (msg.content.startsWith("!ciu")) {
+      messageContent = msg.content.split(" ")
       let messageTest = messageContent[1].toLowerCase();
       msg.reply('Can you use ' + messageTest + '? Lets find out..')
       let caniuseReply = caniuse.find(messageTest)
@@ -40,14 +41,21 @@ client.on('message', msg => {
       let NumberOfOptions = resultsArray.length;
       if (NumberOfOptions >= 2) {
         console.log("theres multiple here bro")
-        msg.reply("Please pick between the following:")
+        msg.reply("Please pick between the following: (!option x)")
         let resultsIndex = 0;
         resultsArray.forEach( () => {
           msg.reply(resultsIndex + " - " + resultsArray[resultsIndex])
           resultsIndex++;
         })
-     
-        
+        // this now goes to the !option event handler at the next function VVV
+        client.on('message', msg => {
+          if (msg.content.startsWith("!option")) {
+            messageContent = msg.content.split(" ")
+            console.log("you chose: " + messageContent[1] + "right?")
+            msg.reply("Looking for results for " + resultsArray[messageContent[1]])
+          }
+        })
+
       } else {
         // in the event that it finds 1 it will then say this!
         msg.reply('I found: ' + caniuseReply + "!")
@@ -81,6 +89,8 @@ client.on('message', msg => {
   //     msg.reply(tostringSupport)
   }
 });
+
+
 
 client.login(token);
 
