@@ -114,7 +114,6 @@ function SupportedList(item) {
 
     // console.log(`browser name: ${browserName} browser support data: ${browser}`)
 
-    
     if (!browser.y){
       console.log(browserName)
       responseString += " " + browserName + ", "
@@ -132,6 +131,15 @@ function SupportedList(item) {
 }
 
 client.login(token);
+
+
+
+
+
+
+
+
+
 
 
 
