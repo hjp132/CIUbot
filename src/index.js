@@ -17,48 +17,62 @@ client.on('message', msg => {
   }
 });
 
-let resultsArray = [];
-// let iterateIndex;
-let messageContent
-
+let isSupported;
 
 client.on('message', msg => {
-  if (msg.content.startsWith("!ciu")) {
-      messageContent = msg.content.split(" ")
-      let messageTest = messageContent[1].toLowerCase();
-      msg.reply('Can you use ' + messageTest + '? Lets find out..')
-      let caniuseReply = caniuse.find(messageTest)
-      
+  if (!msg.content.startsWith("!ciu")) {
+    return;
+  }
 
-      //if it finds multiple options for you to pick from it splits and turns into an array
-      // (console logs for debugging please delete when finished, idiot)
-      resultsArray = caniuseReply.toString().split(",");
-      console.log(caniuseReply)
-      console.log(resultsArray)
-      console.log(resultsArray.length)
+  let messageContent = msg.content.split(" ")
+  let messageTest = messageContent[1].toLowerCase();
+  msg.reply('Can you use ' + messageTest + '? Lets find out..')
+  let caniuseReply = caniuse.find(messageTest)
 
-      //in the event that there is multiple options it will let you pick what one you meant
-      let NumberOfOptions = resultsArray.length;
-      if (NumberOfOptions >= 2) {
-        console.log("theres multiple here bro")
-        msg.reply("Please pick between the following: (!option x)")
-        let resultsIndex = 0;
-        resultsArray.forEach( () => {
-          msg.reply(resultsIndex + " - " + resultsArray[resultsIndex])
-          resultsIndex++;
-        })
-        // this now goes to the !option event handler at the next function VVV
-        client.on('message', msg => {
-          if (msg.content.startsWith("!option")) {
-            messageContent = msg.content.split(" ")
-            msg.reply("Looking for results for " + resultsArray[messageContent[1]])
-          }
-        })
 
-      } else {
-        // in the event that it finds 1 it will then say this!
-        msg.reply('I found: ' + caniuseReply + "!")
+  //if it finds multiple options for you to pick from it splits and turns into an array
+  // (console logs for debugging please delete when finished, idiot)
+  let resultsArray = caniuseReply.toString().split(",");
+  console.log(caniuseReply)
+  console.log(resultsArray)
+  console.log(resultsArray.length)
+
+  //in the event that there is multiple options it will let you pick what one you meant
+  let NumberOfOptions = resultsArray.length;
+
+
+  // multiple results
+  if (NumberOfOptions >= 2) {
+    console.log("theres multiple here bro")
+    // ask user to pick 1 of the options
+    msg.reply("Please pick between the following: (!option x)")
+    
+    resultsArray.forEach((value, i) => {
+      msg.reply(i + " - " + value)
+    })
+    // this now goes to the !option event handler at the next function VVV
+    client.on('message', msg => {
+      // parse the option they chose
+      if (msg.content.startsWith("!option")) {
+        messageContent = msg.content.split(" ")
+        const featureChoice =  resultsArray[messageContent[1]];
+        msg.reply("Looking for results for " + featureChoice);
+        isSupported = caniuse.getSupport(featureChoice)
+        isSupported = JSON.stringify(isSupported)
+        msg.reply(isSupported)
+
       }
+    })
+
+  }
+  // single result
+  else {
+    // in the event that it finds 1 it will then say this!
+    msg.reply('I found: ' + caniuseReply + "!")
+    isSupported = caniuse.getSupport(caniuseReply)
+    isSupported = JSON.stringify(isSupported)
+    msg.reply(isSupported)
+  }
 
 
   //     if (caniuseReply == "" || caniuseReply == null || caniuseReply == undefined){
@@ -72,28 +86,29 @@ client.on('message', msg => {
   //     console.log("caniusereply " + caniuseReply)
 
   //     //in instance when there are multiple give the option to pick between the array
-    
-  //     let getSupport;
-  //     if (typeof caniuseReply === 'string'){
-  //       getSupport = caniuse.getSupport(caniuseReply, false)
-  //       console.log(getSupport)
-  //     } else {
-  //       getSupport = caniuse.getSupport(caniuseReply[0], false)
-  //       console.log(getSupport)
-  //     }
-      
- 
+
+  // let getSupport;
+  // if (typeof caniuseReply === 'string') {
+  //   getSupport = caniuse.getSupport(caniuseReply, true)
+  //   console.log(getSupport)
+  // } else {
+  //   getSupport = caniuse.getSupport(caniuseReply[0], true)
+  //   console.log(getSupport)
+  // }
+
+  // msg.reply("Results:" + JSON.stringify(getSupport))
+
+
 
   //     let tostringSupport = getSupport.toString();
   //     msg.reply(tostringSupport)
-  }
+
 });
 
 
 
 client.login(token);
 
-// TO DO - Implement a caniuseapi and look into if i need npm/superagent
 
 
 
