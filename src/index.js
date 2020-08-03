@@ -17,15 +17,15 @@ client.on('message', msg => {
   }
 });
 
-let isSupported;
+
 
 client.on('message', msg => {
   if (!msg.content.startsWith("!ciu")) {
     return;
   }
 
-  let messageContent = msg.content.split(" ")
-  let messageTest = messageContent[1].toLowerCase();
+  let optionNumbert = msg.content.split(" ")
+  let messageTest = optionNumbert[1].toLowerCase();
   msg.reply('Can you use ' + messageTest + '? Lets find out..')
   let caniuseReply = caniuse.find(messageTest)
 
@@ -51,16 +51,30 @@ client.on('message', msg => {
       msg.reply(i + " - " + value)
     })
     // this now goes to the !option event handler at the next function VVV
-    client.on('message', msg => {
+    client.on('message', msg => { 
       // parse the option they chose
       if (msg.content.startsWith("!option")) {
-        messageContent = msg.content.split(" ")
-        const featureChoice =  resultsArray[messageContent[1]];
-        msg.reply("Looking for results for " + featureChoice);
-        isSupported = caniuse.getSupport(featureChoice)
-        isSupported = JSON.stringify(isSupported)
-        msg.reply(isSupported)
 
+        // if !option x is invalid then don't take it as a response
+        //to test (ie - resultsarray[messagecontent[X]] )
+        const optionNumber = msg.content.split(" ")[1]
+
+        // Is optionNumber a valid choice?
+        if(resultsArray[optionNumber] == undefined) {
+          msg.reply('nope')
+          return
+        }
+
+        const featureChoice =  resultsArray[optionNumber];
+        msg.reply("Looking for results for " + featureChoice);
+        const supportData = caniuse.getSupport(featureChoice)
+
+        const doesntSupport = SupportedList(supportData)
+        // call formatting function here
+        msg.reply("This feature isn't supported by: ")
+        msg.channel.send("> " + doesntSupport)
+
+        // call formatting function here
       }
     })
 
@@ -69,45 +83,113 @@ client.on('message', msg => {
   else {
     // in the event that it finds 1 it will then say this!
     msg.reply('I found: ' + caniuseReply + "!")
-    isSupported = caniuse.getSupport(caniuseReply)
-    isSupported = JSON.stringify(isSupported)
-    msg.reply(isSupported)
+    const supportData = caniuse.getSupport(caniuseReply)
+
+    const doesntSupport = SupportedList(supportData)
+    // call formatting function here
+    msg.reply("This feature isn't supported by: ")
+    msg.channel.send("> " + doesntSupport)
+    
   }
 
-
-  //     if (caniuseReply == "" || caniuseReply == null || caniuseReply == undefined){
-  //         caniuseReply = messageTest
-  //         msg.reply("I'm sorry I can't seem to find what you're looking for.")
-  //     } else {
-  //         msg.reply("I'm looking at " + caniuseReply[0] + ".")
-  //     }
-
-  //     console.log("mesage test " + messageTest)
-  //     console.log("caniusereply " + caniuseReply)
-
-  //     //in instance when there are multiple give the option to pick between the array
-
-  // let getSupport;
-  // if (typeof caniuseReply === 'string') {
-  //   getSupport = caniuse.getSupport(caniuseReply, true)
-  //   console.log(getSupport)
-  // } else {
-  //   getSupport = caniuse.getSupport(caniuseReply[0], true)
-  //   console.log(getSupport)
-  // }
-
-  // msg.reply("Results:" + JSON.stringify(getSupport))
-
-
-
-  //     let tostringSupport = getSupport.toString();
-  //     msg.reply(tostringSupport)
 
 });
 
 
+function SupportedList(item) {
+
+  console.table(item)
+
+  // how do I access the different keys?
+  const keys = Object.keys(item); // an array of browser names e.g. ['edge', 'firefox' etc.]
+  const amountOfKeys = keys.length // 17ish
+  let index = 0;
+
+  let responseString = '';
+
+  while (amountOfKeys > index){
+    // I want the object of that browsers support data
+    const browserName = keys[index];
+    const browser = item[browserName];
+
+    // console.log(`browser name: ${browserName} browser support data: ${browser}`)
+
+    
+    if (!browser.y){
+      console.log(browserName)
+      responseString += " " + browserName + ", "
+      
+    }
+
+
+    index++
+  }
+  // what fields do I caare about?
+
+  // eventually return the browsers that do support this feature
+  console.log(responseString)
+  return responseString;
+}
 
 client.login(token);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
