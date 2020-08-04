@@ -65,13 +65,33 @@ client.on('message', msg => {
   //       }
 
         const featureChoice =  resultsArray[0].toString();
-        msg.channel.send("Looking for results for " + featureChoice);
+        // msg.channel.send("Looking for results for " + featureChoice);
         const supportData = caniuse.getSupport(featureChoice)
 
-        const doesntSupport = SupportedList(supportData)
+        const doesntSupport = UnSupportedList(supportData)
+        const isSupported = SupportedList(supportData)
         // call formatting function here
-        msg.channel.send("This feature isn't supported by: ")
-        msg.channel.send("> " + doesntSupport)
+        // msg.channel.send("> This feature isn't supported by: ")
+        // msg.channel.send("> " + doesntSupport)
+        // msg.channel.send("> For more info: \n https://caniuse.com/#search=" + featureChoice + "?")
+
+        const exampleEmbed = new Discord.MessageEmbed()
+        .setColor('#0099ff')
+        .setTitle('Can I use: ' + featureChoice + "?")
+        .setURL("https://caniuse.com/#search=" + featureChoice)
+        .setAuthor('CanIUseBOT', 'https://i.imgur.com/sTkTHO5.jpeg')
+
+        .addFields(
+          // { name: 'This feature isnt used by:', value: doesntSupport }
+        { name: 'This feature ISNT supported by: ', value: doesntSupport},
+        { name: 'This feature IS supported by', value: isSupported}
+        
+          
+        )
+        
+        .setTimestamp()
+        msg.channel.send(exampleEmbed);
+        
 
         // call formatting function here
   //     }
@@ -81,19 +101,74 @@ client.on('message', msg => {
   // single result
   else {
     // in the event that it finds 1 it will then say this!
-    msg.channel.send('I found: ' + caniuseReply + "!")
+    // msg.channel.send('I found: ' + caniuseReply + "!")
     const supportData = caniuse.getSupport(caniuseReply)
+    const featureChoice = caniuseReply;
+    const doesntSupport = UnSupportedList(supportData)
+    const isSupported = SupportedList(supportData)
+    supportData.toString();
+    // // call formatting function here
+    // msg.channel.send("This feature isn't supported by: ")
+    // msg.channel.send("> " + doesntSupport)
+    // msg.channel.send("> For more info: \n https://caniuse.com/#search=" + supportData)
 
-    const doesntSupport = SupportedList(supportData)
-    // call formatting function here
-    msg.channel.send("This feature isn't supported by: ")
-    msg.channel.send("> " + doesntSupport)
-    
+    // inside a command, event listener, etc.
+    const exampleEmbed = new Discord.MessageEmbed()
+        .setColor('#0099ff')
+        .setTitle('Can I use: ' + featureChoice + "?")
+        .setURL("https://caniuse.com/#search=" + featureChoice)
+        .setAuthor('CanIUseBOT', 'https://i.imgur.com/sTkTHO5.jpeg')
+
+        .addFields(
+          // { name: 'This feature isnt used by:', value: doesntSupport }
+    { name: 'This feature ISNT supported by: ', value: doesntSupport},
+		{ name: 'This feature IS supported by', value: isSupported}
+        
+          
+        )
+        
+        .setTimestamp()
+        msg.channel.send(exampleEmbed);
+        
   }
 
 
 });
 
+
+function UnSupportedList(item) {
+
+  console.table(item)
+
+  // how do I access the different keys?
+  const keys = Object.keys(item); // an array of browser names e.g. ['edge', 'firefox' etc.]
+  const amountOfKeys = keys.length // 17ish
+  let index = 0;
+
+  let responseString = '';
+
+  while (amountOfKeys > index){
+    // I want the object of that browsers support data
+    const browserName = keys[index];
+    const browser = item[browserName];
+
+    // console.log(`browser name: ${browserName} browser support data: ${browser}`)
+
+    if (!browser.y){
+      console.log(browserName)
+      responseString += " " + browserName + ", "
+      
+    }
+
+
+    index++
+  }
+  // what fields do I caare about?
+
+  // eventually return the browsers that do support this feature
+  console.log(responseString)
+  return responseString;
+}
 
 function SupportedList(item) {
 
@@ -113,7 +188,7 @@ function SupportedList(item) {
 
     // console.log(`browser name: ${browserName} browser support data: ${browser}`)
 
-    if (!browser.y){
+    if (browser.y){
       console.log(browserName)
       responseString += " " + browserName + ", "
       
