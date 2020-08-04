@@ -26,7 +26,6 @@ client.on('message', msg => {
 
   let optionNumbert = msg.content.split(" ")
   let messageTest = optionNumbert[1].toLowerCase();
-  msg.reply('Can you use ' + messageTest + '? Lets find out..')
   let caniuseReply = caniuse.find(messageTest)
 
 
@@ -43,12 +42,11 @@ client.on('message', msg => {
 
   // multiple results
   if (NumberOfOptions >= 2) {
-    console.log("theres multiple here bro")
     // ask user to pick 1 of the options
-    msg.reply("Please pick between the following: (!option x)")
+    msg.channel.send("Please pick between the following: (!option x)")
     
     resultsArray.forEach((value, i) => {
-      msg.reply(i + " - " + value)
+      msg.channel.send(i + " - " + value)
     })
     // this now goes to the !option event handler at the next function VVV
     client.on('message', msg => { 
@@ -61,17 +59,17 @@ client.on('message', msg => {
 
         // Is optionNumber a valid choice?
         if(resultsArray[optionNumber] == undefined) {
-          msg.reply('nope')
+          msg.reply('Not a valid option, please try again!')
           return
         }
 
         const featureChoice =  resultsArray[optionNumber];
-        msg.reply("Looking for results for " + featureChoice);
+        msg.channel.send("Looking for results for " + featureChoice);
         const supportData = caniuse.getSupport(featureChoice)
 
         const doesntSupport = SupportedList(supportData)
         // call formatting function here
-        msg.reply("This feature isn't supported by: ")
+        msg.channel.send("This feature isn't supported by: ")
         msg.channel.send("> " + doesntSupport)
 
         // call formatting function here
@@ -82,12 +80,12 @@ client.on('message', msg => {
   // single result
   else {
     // in the event that it finds 1 it will then say this!
-    msg.reply('I found: ' + caniuseReply + "!")
+    msg.channel.send('I found: ' + caniuseReply + "!")
     const supportData = caniuse.getSupport(caniuseReply)
 
     const doesntSupport = SupportedList(supportData)
     // call formatting function here
-    msg.reply("This feature isn't supported by: ")
+    msg.channel.send("This feature isn't supported by: ")
     msg.channel.send("> " + doesntSupport)
     
   }
