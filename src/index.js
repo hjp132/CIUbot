@@ -42,28 +42,29 @@ client.on('message', msg => {
 
   // multiple results
   if (NumberOfOptions >= 2) {
-    // ask user to pick 1 of the options
-    msg.channel.send("Please pick between the following: (!option x)")
+
+  //   // ask user to pick 1 of the options
+  //   msg.channel.send("Please pick between the following: (!option x)")
     
-    resultsArray.forEach((value, i) => {
-      msg.channel.send(i + " - " + value)
-    })
-    // this now goes to the !option event handler at the next function VVV
-    client.on('message', msg => { 
-      // parse the option they chose
-      if (msg.content.startsWith("!option")) {
+  //   resultsArray.forEach((value, i) => {
+  //     msg.channel.send(i + " - " + value)
+  //   })
+  //   // this now goes to the !option event handler at the next function VVV
+  //   client.on('message', msg => { 
+  //     // parse the option they chose
+  //     if (msg.content.startsWith("!option")) {
 
-        // if !option x is invalid then don't take it as a response
-        //to test (ie - resultsarray[messagecontent[X]] )
-        const optionNumber = msg.content.split(" ")[1]
+  //       // if !option x is invalid then don't take it as a response
+  //       //to test (ie - resultsarray[messagecontent[X]] )
+  //       const optionNumber = msg.content.split(" ")[1]
 
-        // Is optionNumber a valid choice?
-        if(resultsArray[optionNumber] == undefined) {
-          msg.reply('Not a valid option, please try again!')
-          return
-        }
+  //       // Is optionNumber a valid choice?
+  //       if(resultsArray[optionNumber] == undefined) {
+  //         msg.reply('Not a valid option, please try again!')
+  //         return
+  //       }
 
-        const featureChoice =  resultsArray[optionNumber];
+        const featureChoice =  resultsArray[0].toString();
         msg.channel.send("Looking for results for " + featureChoice);
         const supportData = caniuse.getSupport(featureChoice)
 
@@ -73,8 +74,8 @@ client.on('message', msg => {
         msg.channel.send("> " + doesntSupport)
 
         // call formatting function here
-      }
-    })
+  //     }
+  //   })
 
   }
   // single result
