@@ -27,6 +27,11 @@ client.on('message', msg => {
   let optionNumbert = msg.content.split(" ")
   let messageTest = optionNumbert[1].toLowerCase();
   let caniuseReply = caniuse.find(messageTest)
+  if (caniuseReply === undefined || caniuseReply.length == 0) {
+    // array empty or does not exist
+    msg.reply("Sorry. I couldn't find what you're looking for.")
+    return;
+}
 
 
   //if it finds multiple options for you to pick from it splits and turns into an array
@@ -70,6 +75,7 @@ client.on('message', msg => {
 
         const doesntSupport = UnSupportedList(supportData)
         const isSupported = SupportedList(supportData)
+        const sortofSupported = sortOfSupportedList(supportData)
         // call formatting function here
         // msg.channel.send("> This feature isn't supported by: ")
         // msg.channel.send("> " + doesntSupport)
@@ -84,11 +90,13 @@ client.on('message', msg => {
         .addFields(
           // { name: 'This feature isnt used by:', value: doesntSupport }
         { name: 'This feature ISNT supported by: ', value: doesntSupport},
+        { name: 'This feature IS PARTIALLY supported by', value: sortofSupported},
         { name: 'This feature IS supported by', value: isSupported}
+        
         
           
         )
-        
+        .setFooter("Click on header for source")
         .setTimestamp()
         msg.channel.send(exampleEmbed);
         
@@ -106,6 +114,7 @@ client.on('message', msg => {
     const featureChoice = caniuseReply;
     const doesntSupport = UnSupportedList(supportData)
     const isSupported = SupportedList(supportData)
+    const sortofSupported = sortOfSupportedList(supportData)
     supportData.toString();
     // // call formatting function here
     // msg.channel.send("This feature isn't supported by: ")
@@ -122,10 +131,13 @@ client.on('message', msg => {
         .addFields(
           // { name: 'This feature isnt used by:', value: doesntSupport }
     { name: 'This feature ISNT supported by: ', value: doesntSupport},
-		{ name: 'This feature IS supported by', value: isSupported}
+    { name: 'This feature IS supported by', value: sortofSupported},
+    { name: 'This feature IS supported by', value: isSupported}
+    
         
           
         )
+        .setFooter("Click on header for source")
         
         .setTimestamp()
         msg.channel.send(exampleEmbed);
@@ -151,11 +163,13 @@ function UnSupportedList(item) {
     // I want the object of that browsers support data
     const browserName = keys[index];
     const browser = item[browserName];
+    // const browserYVersion = keys.y
 
     // console.log(`browser name: ${browserName} browser support data: ${browser}`)
 
     if (!browser.y){
       console.log(browserName)
+      console.log(browser)
       responseString += " " + browserName + ", "
       
     }
@@ -189,15 +203,49 @@ function SupportedList(item) {
     // console.log(`browser name: ${browserName} browser support data: ${browser}`)
 
     if (browser.y){
-      console.log(browserName)
-      responseString += " " + browserName + ", "
+      console.log(browserName + "v" + browser.y)
+      responseString += " " + browserName + " (v" + browser.y + "+)" +  ", " 
       
     }
 
 
     index++
   }
-  // what fields do I caare about?
+  
+
+  // eventually return the browsers that do support this feature
+  console.log(responseString)
+  return responseString;
+}
+
+function sortOfSupportedList(item) {
+
+  console.table(item)
+
+  // how do I access the different keys?
+  const keys = Object.keys(item); // an array of browser names e.g. ['edge', 'firefox' etc.]
+  const amountOfKeys = keys.length // 17ish
+  let index = 0;
+
+  let responseString = '';
+
+  while (amountOfKeys > index){
+    // I want the object of that browsers support data
+    const browserName = keys[index];
+    const browser = item[browserName];
+
+    // console.log(`browser name: ${browserName} browser support data: ${browser}`)
+
+    if (browser.a){
+      console.log(browserName + "v" + browser.a)
+      responseString += " " + browserName + " (v." + browser.a + "+)" +  ", " 
+      
+    }
+
+
+    index++
+  }
+  
 
   // eventually return the browsers that do support this feature
   console.log(responseString)
