@@ -204,7 +204,7 @@ function SupportedList(item) {
 
     if (browser.y){
       console.log(browserName + "v" + browser.y)
-      responseString += " " + browserName + " (v" + browser.y + "+)" +  ", " 
+      responseString += " " + browserName + " (v." + browser.y + "+)" +  ", " 
       
     }
 
