@@ -34,18 +34,17 @@ client.on('message', msg => {
 }
 
 
-  //if it finds multiple options for you to pick from it splits and turns into an array
-  // (console logs for debugging please delete when finished, idiot)
+
   let resultsArray = caniuseReply.toString().split(",");
   console.log(caniuseReply)
   console.log(resultsArray)
   console.log(resultsArray.length)
 
-  //in the event that there is multiple options it will let you pick what one you meant
+
   let NumberOfOptions = resultsArray.length;
 
 
-  // multiple results
+  // in the event that theres multiple results, it will take the first one
   if (NumberOfOptions >= 2) {
    caniuseReply = caniuseReply[0];
   }
@@ -67,7 +66,6 @@ client.on('message', msg => {
       .setAuthor('CanIUseBOT', 'https://i.imgur.com/sTkTHO5.jpeg')
 
       .addFields(
-        // { name: 'This feature isnt used by:', value: doesntSupport }
   { name: 'This feature ISNT supported by: ', value: doesntSupport + "."},
   { name: 'This feature IS POTENTIALLY supported by', value: sortofSupported + "."},
   { name: 'This feature IS supported by', value: isSupported + "."}
@@ -85,8 +83,6 @@ client.on('message', msg => {
 function UnSupportedList(item) {
 
   console.table(item)
-
-  // how do I access the different keys?
   const keys = Object.keys(item); // an array of browser names e.g. ['edge', 'firefox' etc.]
   const amountOfKeys = keys.length // 17ish
   let index = 0;
@@ -97,9 +93,7 @@ function UnSupportedList(item) {
     // I want the object of that browsers support data
     const browserName = keys[index];
     const browser = item[browserName];
-    // const browserYVersion = keys.y
 
-    // console.log(`browser name: ${browserName} browser support data: ${browser}`)
 
     if (!browser.y){
       console.log(browserName)
@@ -111,7 +105,7 @@ function UnSupportedList(item) {
 
     index++
   }
-  // what fields do I caare about?
+
 
   // eventually return the browsers that do support this feature
   console.log(responseString)
@@ -122,7 +116,7 @@ function SupportedList(item) {
 
   console.table(item)
 
-  // how do I access the different keys?
+
   const keys = Object.keys(item); // an array of browser names e.g. ['edge', 'firefox' etc.]
   const amountOfKeys = keys.length // 17ish
   let index = 0;
@@ -130,19 +124,16 @@ function SupportedList(item) {
   let responseString = '';
 
   while (amountOfKeys > index){
-    // I want the object of that browsers support data
+
     const browserName = keys[index];
     const browser = item[browserName];
 
-    // console.log(`browser name: ${browserName} browser support data: ${browser}`)
 
     if (browser.y){
       console.log(browserName + "v" + browser.y)
       responseString += " " + browserName + " (v." + browser.y + "+)" +  ", " 
       
     }
-
-
     index++
   }
   
@@ -175,8 +166,6 @@ function sortOfSupportedList(item) {
       responseString += " " + browserName + " (v." + browser.a + "+)" +  ", " 
       
     }
-
-
     index++
   }
   
