@@ -11,13 +11,6 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on('message', msg => {
-  if (msg.content === 'ping') {
-    msg.reply('pong');
-  }
-});
-
-
 
 client.on('message', msg => {
   if (!msg.content.startsWith("!ciu")) {
@@ -31,7 +24,7 @@ client.on('message', msg => {
     // array empty or does not exist
     msg.reply("Sorry. I couldn't find what you're looking for.")
     return;
-}
+  }
 
 
 
@@ -53,9 +46,15 @@ client.on('message', msg => {
   // msg.channel.send('I found: ' + caniuseReply + "!")
   const supportData = caniuse.getSupport(caniuseReply)
   const featureChoice = caniuseReply;
-  const doesntSupport = UnSupportedList(supportData)
-  const isSupported = SupportedList(supportData)
-  const sortofSupported = sortOfSupportedList(supportData)
+  const doesntSupport = anotherList(supportData, "n", function(browserName, browserData) {
+     return browserName + ', '
+  })
+  const isSupported = anotherList(supportData, "y", function(browserName, browserData) {
+    return browserName + "(" + "v" + browserData.y + ")" +  ', '
+  })
+  const sortofSupported = anotherList(supportData, "a", function(browserName, browserData) {
+     return browserName + "(" + "v" + browserData.a + ")" +  ', '
+  })
   supportData.toString();
 
   // inside a command, event listener, etc.
@@ -64,21 +63,36 @@ client.on('message', msg => {
       .setTitle('Can I use: ' + featureChoice + "?")
       .setURL("https://caniuse.com/#search=" + featureChoice)
       .setAuthor('CanIUseBOT', 'https://i.imgur.com/sTkTHO5.jpeg')
-
       .addFields(
-  { name: 'This feature ISNT supported by: ', value: doesntSupport + "."},
-  { name: 'This feature IS POTENTIALLY supported by', value: sortofSupported + "."},
-  { name: 'This feature IS supported by', value: isSupported + "."}
-  
-      
-        
+        { name: 'This feature ISNT supported by: ', value: doesntSupport + "."},
+        { name: 'This feature IS POTENTIALLY supported by', value: sortofSupported + "."},
+        { name: 'This feature IS supported by', value: isSupported + "."}
       )
       .setFooter("Click on header for source")
-      
-      .setTimestamp()
+      .setTimestamp();
+
       msg.channel.send(exampleEmbed);
 });
 
+function anotherList(item, word, callback) {
+
+  let responseString = '';
+
+
+  // loop through the items values
+  for (const browserName in item) {
+    // key === browserName
+    const Browser = item[browserName]
+    // console.log(Browser)
+    if (Browser[word]){
+      responseString += callback(browserName, Browser)
+    }
+    
+    
+  }
+  // return the value
+  return responseString;
+}
 
 function UnSupportedList(item) {
 
@@ -101,8 +115,6 @@ function UnSupportedList(item) {
       responseString += " " + browserName + ", "
       
     }
-
-
     index++
   }
 
@@ -154,6 +166,7 @@ function sortOfSupportedList(item) {
 
   let responseString = '';
 
+  
   while (amountOfKeys > index){
     // I want the object of that browsers support data
     const browserName = keys[index];
